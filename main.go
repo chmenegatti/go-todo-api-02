@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-todo-api-01/routes"
+	"go-todo-api-02/routes"
 
 	"github.com/gin-gonic/gin"
 )

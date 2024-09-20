@@ -2,7 +2,47 @@
 
 Neste artigo, daremos continuidade à construção da nossa API RESTful, configurando o banco de dados SQLite, integrando o ORM GORM e implementando a persistência de dados, aplicando os princípios SOLID e a arquitetura TDD.
 
-#### Passo 1: Configurando o Banco de Dados SQLite
+### Banco de Dados, GORM e Persistência
+Persistir dados é uma parte essencial de qualquer aplicação. Hoje vamos configurar o banco de dados SQLite, integrar o GORM para manipulação de dados e implementar as operações CRUD para o modelo `Todo`.
+
+#### Instalando o GORM
+
+O GORM é um ORM (Object-Relational Mapping) para Go que simplifica a interação com o banco de dados. Para instalar o GORM, execute o seguinte comando:
+
+```bash
+go get gorm.io/gorm
+```
+
+#### Instalando o Driver SQLite
+
+Para conectar ao banco de dados SQLite, precisamos instalar o driver correspondente. Execute o seguinte comando:
+
+```bash
+go get gorm.io/driver/sqlite
+```
+
+#### Passo 1: Definindo o Modelo
+
+Na pasta `models`, vamos criar o modelo `Todo`. O modelo representa a estrutura dos dados que serão persistidos no banco.
+
+**models/todo.go**:
+```go
+package models
+
+import "gorm.io/gorm"
+
+// Todo representa a estrutura da tabela no banco de dados
+type Todo struct {
+	gorm.Model
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Completed   bool   `json:"completed"`
+}
+```
+
+O `gorm.Model` adiciona automaticamente campos como `ID`, `CreatedAt`, `UpdatedAt`, e `DeletedAt` ao modelo.
+
+#### Passo 2: Configurando o Banco de Dados SQLite
 
 Primeiro, vamos criar a conexão com o banco de dados SQLite. Adicione uma nova pasta chamada `database` e crie o arquivo `database.go`.
 
@@ -35,27 +75,6 @@ func Connect() {
 ```
 
 Aqui, a função `Connect` inicializa a conexão com o SQLite e executa a migração automática do modelo `Todo` para criar a tabela no banco de dados.
-
-#### Passo 2: Definindo o Modelo
-
-Na pasta `models`, vamos criar o modelo `Todo`. O modelo representa a estrutura dos dados que serão persistidos no banco.
-
-**models/todo.go**:
-```go
-package models
-
-import "gorm.io/gorm"
-
-// Todo representa a estrutura da tabela no banco de dados
-type Todo struct {
-	gorm.Model
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Completed   bool   `json:"completed"`
-}
-```
-
-O `gorm.Model` adiciona automaticamente campos como `ID`, `CreatedAt`, `UpdatedAt`, e `DeletedAt` ao modelo.
 
 #### Passo 3: Atualizando o Servidor para Conectar ao Banco de Dados
 
